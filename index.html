@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мосволонтер - Ресурсный центр добровольчества</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- HEADER (FIXED) -->
+<header class="header">
+    <div class="container">
+        <div class="header-content">
+            <div class="logo">
+                <img src="img/logo.png" alt="Логотип Мосволонтер">
+                <span>Мосволонтер</span>
+            </div>
+            
+            <nav class="nav">
+                <a href="#screen1" class="nav-link">Главная</a>
+                <a href="#screen2" class="nav-link">Направления</a>
+                <a href="#screen3" class="nav-link">Мероприятия</a>
+                <a href="#screen4" class="nav-link">Галерея</a>
+            </nav>
+
+            <div class="header-contacts">
+                <span>+7 (495) 123-45-67</span>
+            </div>
+
+            <div class="header-socials">
+                <a href="#" class="social-icon" title="ВКонтакте">VK</a>
+                <a href="#" class="social-icon" title="Одноклассники">OK</a>
+                <a href="#" class="social-icon" title="Телеграмм">TG</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- FIXED SOCIAL ICONS (RIGHT SIDE) -->
+<div class="fixed-socials">
+    <a href="#" class="fixed-social-icon" title="ВКонтакте">VK</a>
+    <a href="#" class="fixed-social-icon" title="Одноклассники">OK</a>
+    <a href="#" class="fixed-social-icon" title="Телеграмм">TG</a>
+</div>
+
+<!-- SCREEN 1: HERO + SLIDER -->
+<section id="screen1" class="screen screen1">
+    <div class="slider-container">
+        <div class="slider">
+            <div class="slide active" style="background-image: url('img/banner1.jpg')"></div>
+            <div class="slide" style="background-image: url('img/banner2.jpg')"></div>
+            <div class="slide" style="background-image: url('img/banner3.jpg')"></div>
+        </div>
+        <button class="slider-prev">❮</button>
+        <button class="slider-next">❯</button>
+        <div class="slider-dots">
+            <span class="dot active" data-slide="0"></span>
+            <span class="dot" data-slide="1"></span>
+            <span class="dot" data-slide="2"></span>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="hero-content">
+            <h1>Присоединяйся к движению добровольцев</h1>
+            <p>Мосволонтер — это центр, где каждый может найти свой путь к помощи людям и развитию общества.</p>
+            <button class="btn btn-primary" id="openVideoBtn">О движении</button>
+        </div>
+    </div>
+</section>
+
+<!-- SCREEN 2: DIRECTIONS -->
+<section id="screen2" class="screen screen2">
+    <div class="container">
+        <h2>Направления работы</h2>
+        <div class="directions-grid">
+            <div class="direction-card">
+                <img src="img/event1.jpg" alt="Социальная помощь">
+                <h3>Социальная помощь</h3>
+                <p>Помощь пожилым людям, инвалидам и малоимущим семьям.</p>
+                <button class="btn btn-secondary" onclick="openModal('modal-dir1')">Подробнее</button>
+            </div>
+
+            <div class="direction-card">
+                <img src="img/event2.jpg" alt="Образование">
+                <h3>Образование</h3>
+                <p>Репетиторство, помощь в обучении, развитие навыков.</p>
+                <button class="btn btn-secondary" onclick="openModal('modal-dir2')">Подробнее</button>
+            </div>
+
+            <div class="direction-card">
+                <img src="img/event3.jpg" alt="Экология">
+                <h3>Экология</h3>
+                <p>Уборка парков, озеленение, защита окружающей среды.</p>
+                <button class="btn btn-secondary" onclick="openModal('modal-dir3')">Подробнее</button>
+            </div>
+
+            <div class="direction-card">
+                <img src="img/event4.jpg" alt="Культура">
+                <h3>Культура и спорт</h3>
+                <p>Организация мероприятий, развитие молодежи.</p>
+                <button class="btn btn-secondary" onclick="openModal('modal-dir4')">Подробнее</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- MODALS FOR DIRECTIONS -->
+<div id="modal-dir1" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('modal-dir1')">&times;</span>
+        <h3>Социальная помощь</h3>
+        <p>Наша программа социальной помощи включает посещение пожилых людей, помощь в хозяйстве, доставку продуктов и лекарств. Мы верим, что каждый человек достоин внимания и заботы.</p>
+    </div>
+</div>
+
+<div id="modal-dir2" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('modal-dir2')">&times;</span>
+        <h3>Образование</h3>
+        <p>Волонтеры помогают школьникам с учебой, проводят мастер-классы и развивают навыки. Мы создаем равные возможности для всех детей.</p>
+    </div>
+</div>
+
+<div id="modal-dir3" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('modal-dir3')">&times;</span>
+        <h3>Экология</h3>
+        <p>Участвуйте в уборке парков, озеленении дворов и защите природы. Вместе мы делаем наш город чище и зеленнее.</p>
+    </div>
+</div>
+
+<div id="modal-dir4" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('modal-dir4')">&times;</span>
+        <h3>Культура и спорт</h3>
+        <p>Организуем спортивные турниры, культурные события и фестивали. Развиваем молодежь через активный образ жизни.</p>
+    </div>
+</div>
+
+<!-- SCREEN 3: EVENTS & REGISTRATION -->
+<section id="screen3" class="screen screen3">
+    <div class="container">
+        <h2>Ближайшие мероприятия</h2>
+        <div class="events-grid">
+            <div class="event-card">
+                <img src="img/event1.jpg" alt="Помощь в доме престарелых">
+                <h3>Помощь в доме престарелых</h3>
+                <p><strong>Дата:</strong> 15 марта 2024</p>
+                <p><strong>Адрес:</strong> ул. Ленина, 45</p>
+                <p><strong>Возраст:</strong> От 16 лет</p>
+                <button class="btn btn-primary" onclick="openModal('modal-register')">Записаться волонтером</button>
+            </div>
+
+            <div class="event-card">
+                <img src="img/event2.jpg" alt="Репетиторство для школьников">
+                <h3>Репетиторство для школьников</h3>
+                <p><strong>Дата:</strong> 20 марта 2024</p>
+                <p><strong>Адрес:</strong> пр. Мира, 78</p>
+                <p><strong>Возраст:</strong> От 18 лет</p>
+                <button class="btn btn-primary" onclick="openModal('modal-register')">Записаться волонтером</button>
+            </div>
+
+            <div class="event-card">
+                <img src="img/event3.jpg" alt="Уборка парка">
+                <h3>Уборка парка Горького</h3>
+                <p><strong>Дата:</strong> 25 марта 2024</p>
+                <p><strong>Адрес:</strong> ул. Крымский вал, 9</p>
+                <p><strong>Возраст:</strong> От 14 лет</p>
+                <button class="btn btn-primary" onclick="openModal('modal-register')">Записаться волонтером</button>
+            </div>
+
+            <div class="event-card">
+                <img src="img/event4.jpg" alt="Спортивный турнир">
+                <h3>Спортивный турнир для молодежи</h3>
+                <p><strong>Дата:</strong> 30 марта 2024</p>
+                <p><strong>Адрес:</strong> Спортивный комплекс "Олимп"</p>
+                <p><strong>Возраст:</strong> От 16 лет</p>
+                <button class="btn btn-primary" onclick="openModal('modal-register')">Записаться волонтером</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- REGISTRATION MODAL -->
+<div id="modal-register" class="modal modal-register">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('modal-register')">&times;</span>
+        <h3>Форма регистрации</h3>
+        <form id="registerForm" class="register-form">
+            <input type="text" id="fullName" placeholder="ФИО" required>
+            <input type="email" id="email" placeholder="Почтовый адрес" required>
+            <input type="password" id="password" placeholder="Пароль" required>
+            
+            <div class="form-buttons">
+                <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+                <button type="button" class="btn btn-secondary" onclick="clearForm()">Очистить форму</button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal('modal-register')">Отменить</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- SCREEN 4: GALLERY + MAP + FOOTER -->
+<section id="screen4" class="screen screen4">
+    <div class="container">
+        <h2>Галерея событий</h2>
+        <div class="gallery">
+            <div class="gallery-item">
+                <img src="img/gallery1.jpg" alt="Событие 1">
+            </div>
+            <div class="gallery-item">
+                <img src="img/gallery2.jpg" alt="Событие 2">
+            </div>
+            <div class="gallery-item">
+                <img src="img/gallery3.jpg" alt="Событие 3">
+            </div>
+            <div class="gallery-item">
+                <img src="img/gallery4.jpg" alt="Событие 4">
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Места проведения мероприятий</h2>
+        <div id="map" class="map-container"></div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>О нас</h4>
+                <p>Мосволонтер — центр добровольчества Москвы</p>
+            </div>
+            <div class="footer-section">
+                <h4>Контакты</h4>
+                <p>📞 +7 (495) 123-45-67</p>
+                <p>📧 info@mosvolunteer.ru</p>
+            </div>
+            <div class="footer-section">
+                <h4>Соцсети</h4>
+                <div class="footer-socials">
+                    <a href="#">ВКонтакте</a>
+                    <a href="#">Одноклассники</a>
+                    <a href="#">Телеграмм</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© И. О. Фамилия, 2024</p>
+            <button class="btn btn-small" id="scrollTop">⬆ Вверх</button>
+        </div>
+    </div>
+</footer>
+
+<!-- VIDEO MODAL -->
+<div id="modal-video" class="modal">
+    <div class="modal-content modal-video-content">
+        <span class="close" onclick="closeModal('modal-video')">&times;</span>
+        <h3>О движении добровольцев</h3>
+        <iframe width="100%" height="400" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allowfullscreen></iframe>
+    </div>
+</div>
+
+<script src="js/script.js"></script>
+<!-- Yandex Maps API -->
+<script src="https://api-maps.yandex.ru/2.1/?apikey=YOUR_API_KEY&lang=ru_RU"></script>
+</body>
+</html>
