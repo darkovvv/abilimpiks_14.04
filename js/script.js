@@ -1,269 +1,297 @@
-// ===== SLIDER FUNCTIONALITY =====
-let currentSlide = 0;
-const slides = document.querySelectorAll('.slide');
-const dots = document.querySelectorAll('.dot');
-let autoSlideInterval;
+const slider = document.getElementById('slider');
+const slides = Array.from(document.querySelectorAll('.slide'));
+const dots = Array.from(document.querySelectorAll('.dot'));
+const prevBtn = document.getElementById('prevSlide');
+const nextBtn = document.getElementById('nextSlide');
+const burger = document.getElementById('burger');
+const nav = document.getElementById('nav');
+const navLinks = Array.from(document.querySelectorAll('.nav a'));
+const aboutBtn = document.getElementById('aboutBtn');
+const toTop = document.getElementById('toTop');
+const eventButtons = Array.from(document.querySelectorAll('.event-btn'));
+const registerForm = document.getElementById('registerForm');
+const selectedEventName = document.getElementById('selectedEventName');
+const loginBtn = document.getElementById('loginBtn');
+const formMessage = document.getElementById('formMessage');
+const galleryButtons = Array.from(document.querySelectorAll('.gallery-card'));
+const galleryPreview = document.getElementById('galleryPreview');
+const galleryCaption = document.getElementById('galleryCaption');
+const mapCards = Array.from(document.querySelectorAll('.map-card'));
+const eventMap = document.getElementById('eventMap');
 
-function showSlide(n) {
-    slides.forEach(slide => slide.classList.remove('active'));
-    dots.forEach(dot => dot.classList.remove('active'));
-    
-    currentSlide = (n + slides.length) % slides.length;
-    slides[currentSlide].classList.add('active');
-    dots[currentSlide].classList.add('active');
+let currentSlide = 0;
+let autoTimer = null;
+let lastActiveTrigger = null;
+
+function renderSlide(index) {
+  if (!slides.length) return;
+  currentSlide = (index + slides.length) % slides.length;
+  slides.forEach((slide, slideIndex) => {
+    slide.classList.toggle('active', slideIndex === currentSlide);
+  });
+  dots.forEach((dot, dotIndex) => {
+    dot.classList.toggle('active', dotIndex === currentSlide);
+  });
 }
 
 function nextSlide() {
-    showSlide(currentSlide + 1);
-    resetAutoSlide();
+  renderSlide(currentSlide + 1);
 }
 
 function prevSlide() {
-    showSlide(currentSlide - 1);
-    resetAutoSlide();
+  renderSlide(currentSlide - 1);
 }
 
-function autoSlide() {
-    nextSlide();
+function stopAuto() {
+  if (autoTimer) {
+    clearInterval(autoTimer);
+    autoTimer = null;
+  }
 }
 
-function resetAutoSlide() {
-    clearInterval(autoSlideInterval);
-    autoSlideInterval = setInterval(autoSlide, 5000);
+function startAuto() {
+  if (!slides.length) return;
+  stopAuto();
+  autoTimer = setInterval(nextSlide, 4500);
 }
 
-const sliderNextBtn = document.querySelector('.slider-next');
-const sliderPrevBtn = document.querySelector('.slider-prev');
-
-if (sliderNextBtn) {
-    sliderNextBtn.addEventListener('click', nextSlide);
-    sliderNextBtn.addEventListener('touchend', nextSlide);
+if (slider) {
+  slider.addEventListener('mouseenter', stopAuto);
+  slider.addEventListener('mouseleave', startAuto);
+  slider.addEventListener('focusin', stopAuto);
+  slider.addEventListener('focusout', startAuto);
+  slider.addEventListener('touchstart', stopAuto, { passive: true });
+  slider.addEventListener('touchend', startAuto, { passive: true });
 }
 
-if (sliderPrevBtn) {
-    sliderPrevBtn.addEventListener('click', prevSlide);
-    sliderPrevBtn.addEventListener('touchend', prevSlide);
-}
-
-dots.forEach((dot, index) => {
-    dot.addEventListener('click', () => {
-        showSlide(index);
-        resetAutoSlide();
-    });
+prevBtn?.addEventListener('click', () => {
+  prevSlide();
+  startAuto();
 });
 
-// Pause on hover
-const sliderContainer = document.querySelector('.slider-container');
-if (sliderContainer) {
-    sliderContainer.addEventListener('mouseenter', () => {
-        clearInterval(autoSlideInterval);
-    });
-
-    sliderContainer.addEventListener('mouseleave', () => {
-        resetAutoSlide();
-    });
-}
-
-// Start auto slide
-autoSlideInterval = setInterval(autoSlide, 5000);
-
-// ===== MODAL FUNCTIONALITY =====
-function openModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.classList.add('show');
-        document.body.style.overflow = 'hidden';
-    }
-}
-
-function closeModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.classList.remove('show');
-        document.body.style.overflow = 'auto';
-    }
-}
-
-// Close modal on background click
-document.querySelectorAll('.modal').forEach(modal => {
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            modal.classList.remove('show');
-            document.body.style.overflow = 'auto';
-        }
-    });
+nextBtn?.addEventListener('click', () => {
+  nextSlide();
+  startAuto();
 });
 
-// Close modal on Escape key
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-        document.querySelectorAll('.modal.show').forEach(modal => {
-            modal.classList.remove('show');
-            document.body.style.overflow = 'auto';
+dots.forEach((dot) => {
+  dot.addEventListener('click', () => {
+    renderSlide(Number(dot.dataset.slide));
+    startAuto();
+  });
+});
+
+if (slides.length) {
+  renderSlide(0);
+  startAuto();
+}
+
+burger?.addEventListener('click', () => {
+  const isOpen = nav.classList.toggle('open');
+  burger.classList.toggle('is-active', isOpen);
+  burger.setAttribute('aria-expanded', String(isOpen));
+});
+
+navLinks.forEach((link) => {
+  link.addEventListener('click', () => {
+    nav.classList.remove('open');
+    burger?.classList.remove('is-active');
+    burger?.setAttribute('aria-expanded', 'false');
+  });
+});
+
+const sections = Array.from(document.querySelectorAll('main section[id]'));
+if (sections.length && 'IntersectionObserver' in window) {
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const currentId = entry.target.getAttribute('id');
+        navLinks.forEach((link) => {
+          const isCurrent = link.getAttribute('href') === `#${currentId}`;
+          link.classList.toggle('is-active', isCurrent);
         });
+      });
+    },
+    {
+      rootMargin: '-40% 0px -45% 0px',
+      threshold: 0.05,
     }
+  );
+  sections.forEach((section) => observer.observe(section));
+}
+
+function openModal(id, trigger = null) {
+  const modal = document.getElementById(id);
+  if (!modal) return;
+  document.querySelectorAll('.modal.show').forEach((openedModal) => closeModal(openedModal, false));
+  modal.classList.add('show');
+  modal.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('modal-open');
+  lastActiveTrigger = trigger;
+}
+
+function closeModal(modal, restoreFocus = true) {
+  if (!modal) return;
+  modal.classList.remove('show');
+  modal.setAttribute('aria-hidden', 'true');
+  if (!document.querySelector('.modal.show')) {
+    document.body.classList.remove('modal-open');
+  }
+  if (restoreFocus && lastActiveTrigger instanceof HTMLElement) {
+    lastActiveTrigger.focus();
+  }
+}
+
+aboutBtn?.addEventListener('click', (event) => {
+  openModal('modal-about', event.currentTarget);
 });
 
-// Video modal
-const openVideoBtn = document.getElementById('openVideoBtn');
-if (openVideoBtn) {
-    openVideoBtn.addEventListener('click', () => {
-        openModal('modal-video');
-    });
-}
-
-// ===== FORM VALIDATION =====
-const registerForm = document.getElementById('registerForm');
-if (registerForm) {
-    registerForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        
-        const fullName = document.getElementById('fullName');
-        const email = document.getElementById('email');
-        const password = document.getElementById('password');
-        
-        let isValid = true;
-        
-        // Clear previous errors
-        [fullName, email, password].forEach(field => {
-            field.classList.remove('error');
-        });
-        
-        // Validate Full Name
-        if (fullName.value.trim().length < 3) {
-            fullName.classList.add('error');
-            isValid = false;
-        }
-        
-        // Validate Email
-        const emailRegex = /^[^s@]+@[^s@]+.[^s@]+$/;
-        if (!emailRegex.test(email.value)) {
-            email.classList.add('error');
-            isValid = false;
-        }
-        
-        // Validate Password
-        if (password.value.length < 6) {
-            password.classList.add('error');
-            isValid = false;
-        }
-        
-        if (isValid) {
-            alert('✅ Спасибо за регистрацию! Мы свяжемся с вами в ближайшее время.');
-            clearForm();
-            closeModal('modal-register');
-        } else {
-            alert('❌ Пожалуйста, заполните все поля корректно.');
-        }
-    });
-}
-
-function clearForm() {
-    const form = document.getElementById('registerForm');
-    if (form) {
-        form.reset();
-        document.querySelectorAll('.register-form input').forEach(input => {
-            input.classList.remove('error');
-        });
-    }
-}
-
-// ===== SCROLL TO TOP =====
-const scrollTopBtn = document.getElementById('scrollTop');
-if (scrollTopBtn) {
-    scrollTopBtn.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-}
-
-// ===== ACTIVE NAV LINK =====
-window.addEventListener('scroll', () => {
-    const sections = document.querySelectorAll('.screen');
-    const navLinks = document.querySelectorAll('.nav-link');
-    
-    let current = '';
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        if (pageYOffset >= sectionTop - 100) {
-            current = section.getAttribute('id');
-        }
-    });
-    
-    navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href').slice(1) === current) {
-            link.classList.add('active');
-        }
-    });
+document.querySelectorAll('[data-modal]').forEach((button) => {
+  button.addEventListener('click', (event) => {
+    openModal(button.dataset.modal, event.currentTarget);
+  });
 });
 
-// ===== YANDEX MAP INITIALIZATION =====
-if (typeof ymaps !== 'undefined') {
-    ymaps.ready(init);
-} else {
-    console.warn('Yandex Maps API не загружена');
+eventButtons.forEach((button) => {
+  button.addEventListener('click', (event) => {
+    if (selectedEventName) {
+      selectedEventName.textContent = button.dataset.event || 'Ближайшее мероприятие';
+    }
+    resetFormState();
+    openModal('modal-register', event.currentTarget);
+  });
+});
+
+galleryButtons.forEach((button) => {
+  button.addEventListener('click', (event) => {
+    if (galleryPreview) galleryPreview.src = button.dataset.image;
+    if (galleryCaption) galleryCaption.textContent = button.dataset.caption || 'Изображение из галереи';
+    const imageAlt = button.querySelector('img')?.alt;
+    if (galleryPreview && imageAlt) galleryPreview.alt = imageAlt;
+    openModal('modal-gallery', event.currentTarget);
+  });
+});
+
+document.querySelectorAll('.modal').forEach((modal) => {
+  modal.addEventListener('click', (event) => {
+    if (event.target === modal) {
+      closeModal(modal);
+    }
+  });
+});
+
+document.querySelectorAll('[data-close]').forEach((button) => {
+  button.addEventListener('click', () => {
+    closeModal(button.closest('.modal'));
+  });
+});
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') {
+    const openedModal = document.querySelector('.modal.show');
+    if (openedModal) closeModal(openedModal);
+  }
+});
+
+function setError(input, errorElement, message) {
+  input.classList.add('error');
+  if (errorElement) errorElement.textContent = message;
 }
 
-function init() {
-    const mapElement = document.getElementById('map');
-    if (!mapElement) return;
-
-    const myMap = new ymaps.Map('map', {
-        center: [55.7558, 37.6173],
-        zoom: 10,
-        controls: ['zoomControl', 'fullscreenControl']
-    });
-
-    const locations = [
-        {
-            coords: [55.7558, 37.6173],
-            title: 'Помощь в доме престарелых',
-            address: 'ул. Ленина, 45'
-        },
-        {
-            coords: [55.7614, 37.6208],
-            title: 'Репетиторство для школьников',
-            address: 'пр. Мира, 78'
-        },
-        {
-            coords: [55.7325, 37.6196],
-            title: 'Уборка парка Горького',
-            address: 'ул. Крымский вал, 9'
-        },
-        {
-            coords: [55.7900, 37.5400],
-            title: 'Спортивный турнир',
-            address: 'Спортивный комплекс "Олимп"'
-        }
-    ];
-
-    locations.forEach(location => {
-        const placemark = new ymaps.Placemark(
-            location.coords,
-            {
-                balloonContent: <strong>${location.title}</strong><br>${location.address}
-            },
-            {
-                preset: 'islands#blueDotIcon'
-            }
-        );
-        myMap.geoObjects.add(placemark);
-    });
+function clearError(input, errorElement) {
+  input.classList.remove('error');
+  if (errorElement) errorElement.textContent = '';
 }
 
-// ===== GALLERY ANIMATION =====
-const galleryItems = document.querySelectorAll('.gallery-item');
-const observerOptions = {
-    threshold: 0.1
-};
+function resetFormState() {
+  if (!registerForm) return;
+  const fullName = document.getElementById('fullName');
+  const address = document.getElementById('address');
+  const password = document.getElementById('password');
+  clearError(fullName, document.getElementById('nameError'));
+  clearError(address, document.getElementById('addressError'));
+  clearError(password, document.getElementById('passwordError'));
+  if (formMessage) {
+    formMessage.textContent = '';
+    formMessage.className = 'form-message';
+  }
+}
 
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.animation = 'slideUp 0.6s ease-out forwards';
-            observer.unobserve(entry.target);
-        }
-    });
-}, observerOptions);
+registerForm?.addEventListener('submit', (event) => {
+  event.preventDefault();
 
-galleryItems.forEach(item => observer.observe(item));
+  const fullName = document.getElementById('fullName');
+  const address = document.getElementById('address');
+  const password = document.getElementById('password');
+  const nameError = document.getElementById('nameError');
+  const addressError = document.getElementById('addressError');
+  const passwordError = document.getElementById('passwordError');
+
+  resetFormState();
+
+  const nameValue = fullName.value.trim();
+  const addressValue = address.value.trim();
+  const passwordValue = password.value.trim();
+
+  let isValid = true;
+
+  if (nameValue.length < 8 || !nameValue.includes(' ')) {
+    setError(fullName, nameError, 'Укажите полное имя и фамилию.');
+    isValid = false;
+  }
+
+  if (addressValue.length < 10) {
+    setError(address, addressError, 'Введите почтовый адрес подробнее.');
+    isValid = false;
+  }
+
+  if (passwordValue.length < 6) {
+    setError(password, passwordError, 'Пароль должен содержать минимум 6 символов.');
+    isValid = false;
+  }
+
+  if (!isValid) {
+    if (formMessage) {
+      formMessage.textContent = 'Проверьте заполнение полей формы.';
+      formMessage.className = 'form-message error';
+    }
+    return;
+  }
+
+  if (formMessage) {
+    formMessage.textContent = 'Заявка отправлена. Координатор свяжется с вами после проверки данных.';
+    formMessage.className = 'form-message success';
+  }
+
+  registerForm.reset();
+  setTimeout(() => {
+    const registerModal = document.getElementById('modal-register');
+    closeModal(registerModal, false);
+  }, 900);
+});
+
+registerForm?.addEventListener('reset', () => {
+  window.setTimeout(resetFormState, 0);
+});
+
+loginBtn?.addEventListener('click', () => {
+  if (formMessage) {
+    formMessage.textContent = 'Кнопка добавлена по требованиям задания. В демо-версии доступна регистрация через форму.';
+    formMessage.className = 'form-message info';
+  }
+});
+
+mapCards.forEach((card) => {
+  card.addEventListener('click', () => {
+    mapCards.forEach((item) => item.classList.remove('active'));
+    card.classList.add('active');
+    if (eventMap) {
+      eventMap.src = card.dataset.map;
+    }
+  });
+});
+
+toTop?.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
